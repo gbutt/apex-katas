@@ -1,4 +1,4 @@
-@IsTest(IsParallel=true)
+@IsTest(IsParallel =true)
 public class TimezonesTest {
     // some timezones for our tests
     static Timezone tzGmt = TimeZone.getTimeZone('GMT');
@@ -6,12 +6,12 @@ public class TimezonesTest {
     static Timezone tzFiji = TimeZone.getTimeZone('Pacific/Fiji');
 
     // Create dates in different timezones - the Datetime object does not know about the timezone
-    static Datetime jan1Gmt = Datetime.newInstanceGmt(2020, 1, 1, 0, 0, 0); // midnight Jan 1 in GMT
-    static Datetime jul1Gmt = Datetime.newInstanceGmt(2020, 7, 1, 0, 0, 0); // midnight Jul 1 in GMT
-    static Datetime jan1Local = Datetime.newInstance(2020, 1, 1, 0, 0, 0); // midnight Jan 1 in MST - user's local timezone
+    static Datetime jan1Gmt = Datetime.newInstanceGmt(2020, 1, 1, 0, 0, 0);  // midnight Jan 1 in GMT
+    static Datetime jul1Gmt = Datetime.newInstanceGmt(2020, 7, 1, 0, 0, 0);  // midnight Jul 1 in GMT
+    static Datetime jan1Local = Datetime.newInstance(2020, 1, 1, 0, 0, 0);  // midnight Jan 1 in MST - user's local timezone
     static Datetime jan1Fiji = Datetime.newInstance(
         jan1Gmt.getTime() - tzFiji.getOffset(jan1Gmt)
-    ); // midnight Jan 1 in Fiji Time
+    );  // midnight Jan 1 in Fiji Time
 
     @IsTest
     static void it_should_have_known_local_timezone() {
@@ -32,10 +32,10 @@ public class TimezonesTest {
         // Timezone offsets are # of milliseconds from GMT.
         // They require a datetime to know whether to use Daylight Time vs Standard Time
         System.assertEquals(0, tzGmt.getOffset(jan1Gmt));
-        System.assertEquals(-28800000, tzLocal.getOffset(jan1Gmt)); // Pacific Standard Time offset
-        System.assertEquals(-25200000, tzLocal.getOffset(jul1Gmt)); // Pacific Daylight Time offset
-        System.assertEquals(46800000, tzFiji.getOffset(jan1Gmt)); // Fiji Standard Time offset
-        System.assertEquals(43200000, tzFiji.getOffset(jul1Gmt)); // Fiji Daylight Time offset
+        System.assertEquals(-28800000, tzLocal.getOffset(jan1Gmt));  // Pacific Standard Time offset
+        System.assertEquals(-25200000, tzLocal.getOffset(jul1Gmt));  // Pacific Daylight Time offset
+        System.assertEquals(46800000, tzFiji.getOffset(jan1Gmt));  // Fiji Standard Time offset
+        System.assertEquals(43200000, tzFiji.getOffset(jul1Gmt));  // Fiji Daylight Time offset
     }
 
     @IsTest
@@ -117,7 +117,15 @@ public class TimezonesTest {
         );
     }
 
-    List<String> tzsids = new List<String>{
+    @IsTest
+    static void it_should_determine_timezone_for_Datetime_now() {
+        Datetime now = Datetime.now();
+        String nowString = now.format('yyyy-MM-dd\'T\'HH:mm:ss');
+        String nowStringGmt = now.formatGmt('yyyy-MM-dd\'T\'HH:mm:ss');
+        System.assertNotEquals(nowString, nowStringGmt);
+    }
+
+    List<String> tzsids = new List<String> {
         'Pacific/Kiritimati',
         'Pacific/Chatham',
         'Pacific/Auckland',
